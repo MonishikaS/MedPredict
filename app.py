@@ -18,14 +18,16 @@ st.set_page_config(
 
 import streamlit.components.v1 as components
 from pathlib import Path
-from textwrap import dedent
-
 from utils import apply_custom_css
 from login import login_page
 from auth import verify_family_email_token
 from database import initialize_database, process_family_email_action
 
-
+def render_html(html_code):
+    cleaned_html = "\n".join(
+        line.lstrip() for line in html_code.splitlines()
+    )
+    st.markdown(cleaned_html, unsafe_allow_html=True)
 # ============================================================
 # SESSION STATE INITIALIZATION
 # ============================================================
@@ -114,9 +116,7 @@ left, search_col, theme_col = st.columns(
 )
 
 with left:
-    st.markdown(
-        dedent(
-            """
+    render_html("""
             <div class="healthai-native-chips">
                 <span class="healthai-chip active">
                     ✦ <b>Research Prototype</b>
@@ -130,10 +130,7 @@ with left:
                     • Machine Learning
                 </span>
             </div>
-            """
-        ),
-        unsafe_allow_html=True,
-    )
+            """)
 
 
 with search_col:
@@ -389,9 +386,7 @@ components.html(
 # HOMEPAGE DASHBOARD PANELS
 # ============================================================
 
-st.markdown(
-    dedent(
-        """
+render_html("""
         <div class="healthai-stat-grid">
 
             <div class="healthai-stat-card">
@@ -675,10 +670,7 @@ st.markdown(
             Research / Academic Prototype &nbsp;•&nbsp;
             AI Health Risk Assessment
         </div>
-        """
-    ),
-    unsafe_allow_html=True,
-)
+        """)
 
 
 # ============================================================
@@ -691,9 +683,7 @@ st.markdown(
 )
 
 
-st.markdown(
-    dedent(
-        """
+render_html("""
         <div id="assessment-section" class="section-heading">
 
             <span class="section-number">01</span>
@@ -713,10 +703,7 @@ st.markdown(
         <p class="assessment-intro">
             Choose one of the available assessments to continue.
         </p>
-        """
-    ),
-    unsafe_allow_html=True,
-)
+        """)
 
 
 card1, card2, card3 = st.columns(3)
@@ -727,9 +714,7 @@ card1, card2, card3 = st.columns(3)
 # ============================================================
 
 with card1:
-    st.markdown(
-        dedent(
-            """
+    render_html("""
             <div class="disease-card">
 
                 <div class="disease-icon">🩸</div>
@@ -744,10 +729,7 @@ with card1:
                 </div>
 
             </div>
-            """
-        ),
-        unsafe_allow_html=True,
-    )
+            """)
 
     if st.button(
         "Assess Diabetes →",
@@ -762,9 +744,7 @@ with card1:
 # ============================================================
 
 with card2:
-    st.markdown(
-        dedent(
-            """
+    render_html("""
             <div class="disease-card">
 
                 <div class="disease-icon">❤️</div>
@@ -779,10 +759,7 @@ with card2:
                 </div>
 
             </div>
-            """
-        ),
-        unsafe_allow_html=True,
-    )
+            """)
 
     if st.button(
         "Assess Heart Disease →",
@@ -797,9 +774,7 @@ with card2:
 # ============================================================
 
 with card3:
-    st.markdown(
-        dedent(
-            """
+    render_html("""
             <div class="disease-card">
 
                 <div class="disease-icon">🎗️</div>
@@ -814,10 +789,7 @@ with card3:
                 </div>
 
             </div>
-            """
-        ),
-        unsafe_allow_html=True,
-    )
+            """)
 
     if st.button(
         "Assess Breast Cancer →",
@@ -831,14 +803,9 @@ with card3:
 # FOOTER
 # ============================================================
 
-st.markdown(
-    dedent(
-        """
+render_html("""
         <div class="healthai-bottom-note">
             HealthAI • EXHRA • Research / Academic Prototype •
             Not a medical diagnosis
         </div>
-        """
-    ),
-    unsafe_allow_html=True,
-)
+        """)
