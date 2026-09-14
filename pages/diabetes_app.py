@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 from pathlib import Path
 
-from utils import display_prediction, apply_common_style
+from utils import display_prediction, apply_common_style,download_assessment_report
 from database import save_health_assessment
 
 
@@ -299,6 +299,11 @@ if st.button(
     )
 
     if result is not None:
+        download_assessment_report(
+            disease="Diabetes",
+            patient_values=raw_patient,
+            result=result,
+            )
         user_id = st.session_state.get("user_id")
 
         if user_id is not None:

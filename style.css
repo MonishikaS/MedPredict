@@ -711,3 +711,12 @@ body:has(.healthai-theme-dark-marker):has(.healthai-current-page-profile)
   color:#fff !important;
   box-shadow:0 13px 28px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08) !important;
 }
+/* Extra spacing after the assessment workflow */
+.healthai-workflow {
+    margin-bottom: 45px !important;
+}
+
+/* Extra space at the bottom of the page */
+.healthai-dashboard-shell {
+    padding-bottom: 45px !important;
+}

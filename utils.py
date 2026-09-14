@@ -503,3 +503,43 @@ def display_prediction(models, patient, disease_name):
 def apply_common_style():
     """Compatibility wrapper used by older disease pages."""
     apply_custom_css()
+# ============================================================
+# DOWNLOAD ASSESSMENT REPORT
+# ============================================================
+
+def download_assessment_report(disease, patient_values, result):
+    """
+    Create a downloadable JSON report for any disease assessment.
+    """
+
+    import json
+    import re
+
+    assessment_report = {
+        "Assessment": f"{disease} Risk Assessment",
+        "Disease": disease,
+        "Risk Category": result.get("risk_category", "Not available"),
+        "Probability": result.get("probability", "Not available"),
+        "Evaluation": result.get("evaluation", "Not available"),
+        "Patient Measurements": patient_values,
+    }
+
+    report_json = json.dumps(
+        assessment_report,
+        indent=4,
+        default=str,
+    )
+
+    safe_disease_name = re.sub(
+        r"[^a-zA-Z0-9]+",
+        "_",
+        disease.lower(),
+    ).strip("_")
+
+    st.download_button(
+        label="📥 Download Assessment",
+        data=report_json,
+        file_name=f"{safe_disease_name}_assessment.json",
+        mime="application/json",
+        key=f"download_{safe_disease_name}_assessment",
+    )

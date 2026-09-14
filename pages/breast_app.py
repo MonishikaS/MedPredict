@@ -10,6 +10,7 @@ from utils import (
     readable_feature,
     breast_default,
     apply_common_style,
+    download_assessment_report,
 )
 
 
@@ -180,6 +181,11 @@ if st.button(
     )
 
     if result is not None:
+        download_assessment_report(
+            disease="Breast Cancer",
+            patient_values=patient_values,
+            result=result,
+    )
 
         user_id = st.session_state.get("user_id")
 
