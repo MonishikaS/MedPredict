@@ -2,7 +2,7 @@ import streamlit as st
 
 # ============================================================
 # STREAMLIT PAGE CONFIGURATION
-# Must be the first Streamlit command in the application.
+# This must be the first Streamlit command.
 # ============================================================
 
 st.set_page_config(
@@ -60,7 +60,9 @@ if _family_action and _family_token:
 
     if _ok:
         st.success("✓ " + _msg)
-        st.info("You can now log in to HealthGuard AI and open Family Health.")
+        st.info(
+            "You can now log in to HealthGuard AI and open Family Health."
+        )
     else:
         st.warning(_msg)
 
@@ -80,17 +82,15 @@ if not st.session_state.get("is_logged_in", False):
 # EXHRA / HEALTHAI HOME
 # ============================================================
 
-# Persistent theme.
-# Every page imports the same utils.py and CSS.
-
 if "healthai_theme" not in st.session_state:
     st.session_state.healthai_theme = "light"
 
 apply_custom_css()
 
 
-# A DOM marker allows style.css to theme the entire Streamlit
-# document, including the sidebar.
+# ============================================================
+# THEME MARKER
+# ============================================================
 
 theme_marker = (
     "healthai-theme-dark-marker"
@@ -105,7 +105,7 @@ st.markdown(
 
 
 # ============================================================
-# TOP BAR — REAL STREAMLIT CONTROLS
+# TOP BAR
 # ============================================================
 
 left, search_col, theme_col = st.columns(
@@ -115,19 +115,23 @@ left, search_col, theme_col = st.columns(
 
 with left:
     st.markdown(
-        """
-        <div class="healthai-native-chips">
-            <span class="healthai-chip active">
-                ✦ <b>Research Prototype</b>
-            </span>
-            <span class="healthai-chip">
-                • Explainable AI
-            </span>
-            <span class="healthai-chip">
-                • Machine Learning
-            </span>
-        </div>
-        """,
+        dedent(
+            """
+            <div class="healthai-native-chips">
+                <span class="healthai-chip active">
+                    ✦ <b>Research Prototype</b>
+                </span>
+
+                <span class="healthai-chip">
+                    • Explainable AI
+                </span>
+
+                <span class="healthai-chip">
+                    • Machine Learning
+                </span>
+            </div>
+            """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -158,20 +162,20 @@ if submitted and search_query.strip():
     q = search_query.strip().lower()
 
     if any(
-        x in q
-        for x in ["breast", "cancer", "tumor", "tumour"]
+        word in q
+        for word in ["breast", "cancer", "tumor", "tumour"]
     ):
         st.switch_page("pages/breast_app.py")
 
     elif any(
-        x in q
-        for x in ["diabetes", "diabetic", "sugar"]
+        word in q
+        for word in ["diabetes", "diabetic", "sugar"]
     ):
         st.switch_page("pages/diabetes_app.py")
 
     elif any(
-        x in q
-        for x in ["heart", "cardiac", "cardiovascular"]
+        word in q
+        for word in ["heart", "cardiac", "cardiovascular"]
     ):
         st.switch_page("pages/heart_app.py")
 
@@ -205,7 +209,7 @@ with theme_col:
 
 
 # ============================================================
-# HERO + DASHBOARD VISUAL
+# HERO SECTION
 # ============================================================
 
 PAGE_CSS = (
@@ -215,9 +219,6 @@ PAGE_CSS = (
 dark = st.session_state.healthai_theme == "dark"
 iframe_theme = "dark" if dark else "light"
 
-
-# The hero is displayed inside an iframe so the HTML/CSS
-# does not appear as visible source code in the Streamlit page.
 
 hero_html = f"""
 <!doctype html>
@@ -270,6 +271,7 @@ hero_html = f"""
             </p>
 
             <div class="healthai-actions">
+
                 <a
                     href="#assessment-section"
                     target="_top"
@@ -285,6 +287,7 @@ hero_html = f"""
                 >
                     ▥&nbsp; Explore Models
                 </a>
+
             </div>
 
             <div class="healthai-mini-note">
@@ -307,6 +310,7 @@ hero_html = f"""
                 class="heart-stage anatomical-heart-stage"
                 aria-label="Anatomical heart visual"
             >
+
                 <img
                     class="anatomical-heart"
                     src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Human_Heart_(NIH_BioArt_228_-_630872).png"
@@ -315,14 +319,17 @@ hero_html = f"""
 
                 <div class="heart-caption">
                     <b>Heart Health</b>
+
                     <small>
                         Explore our AI-powered risk assessments
                     </small>
                 </div>
+
             </div>
 
 
             <div class="healthai-float-card diabetes">
+
                 <span class="float-icon diabetes-icon">●</span>
 
                 <div>
@@ -331,10 +338,12 @@ hero_html = f"""
                 </div>
 
                 <b>→</b>
+
             </div>
 
 
             <div class="healthai-float-card breast">
+
                 <span class="float-icon breast-icon">🎗</span>
 
                 <div>
@@ -343,10 +352,12 @@ hero_html = f"""
                 </div>
 
                 <b>→</b>
+
             </div>
 
 
             <div class="healthai-float-card heart">
+
                 <span class="float-icon heart-icon">♥</span>
 
                 <div>
@@ -355,6 +366,7 @@ hero_html = f"""
                 </div>
 
                 <b>→</b>
+
             </div>
 
         </div>
@@ -378,88 +390,278 @@ components.html(
 # ============================================================
 
 st.markdown(
-    """
-    <div class="healthai-stat-grid">
+    dedent(
+        """
+        <div class="healthai-stat-grid">
 
-        <div class="healthai-stat-card">
-            <div class="stat-symbol cyan">♧</div>
-            <div>
-                <strong>03</strong>
-                <span>Health Assessments</span>
-                <small>Breast • Diabetes • Heart</small>
-            </div>
-        </div>
-
-        <div class="healthai-stat-card">
-            <div class="stat-symbol blue">▱</div>
-            <div>
-                <strong>05</strong>
-                <span>ML Models</span>
-                <small>Ensemble Approach</small>
-            </div>
-        </div>
-
-        <div class="healthai-stat-card">
-            <div class="stat-symbol purple">◉</div>
-            <div>
-                <strong>XAI</strong>
-                <span>Explainable AI</span>
-                <small>SHAP &amp; Feature Importance</small>
-            </div>
-        </div>
-
-        <div class="healthai-stat-card">
-            <div class="stat-symbol teal">▥</div>
-            <div>
-                <strong>100%</strong>
-                <span>Interactive</span>
-                <small>Visual Explanations</small>
-            </div>
-        </div>
-
-    </div>
-
-
-    <div id="models" class="healthai-section-grid">
-
-        <section class="healthai-panel models-panel">
-
-            <div class="panel-heading">
-                <span class="panel-icon">⚙</span>
+            <div class="healthai-stat-card">
+                <div class="stat-symbol cyan">♧</div>
 
                 <div>
-                    <h3>AI Models Used</h3>
+                    <strong>03</strong>
+                    <span>Health Assessments</span>
+                    <small>Breast • Diabetes • Heart</small>
+                </div>
+            </div>
+
+
+            <div class="healthai-stat-card">
+                <div class="stat-symbol blue">▱</div>
+
+                <div>
+                    <strong>05</strong>
+                    <span>ML Models</span>
+                    <small>Ensemble Approach</small>
+                </div>
+            </div>
+
+
+            <div class="healthai-stat-card">
+                <div class="stat-symbol purple">◉</div>
+
+                <div>
+                    <strong>XAI</strong>
+                    <span>Explainable AI</span>
+                    <small>SHAP &amp; Feature Importance</small>
+                </div>
+            </div>
+
+
+            <div class="healthai-stat-card">
+                <div class="stat-symbol teal">▥</div>
+
+                <div>
+                    <strong>100%</strong>
+                    <span>Interactive</span>
+                    <small>Visual Explanations</small>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="models" class="healthai-section-grid">
+
+            <section class="healthai-panel models-panel">
+
+                <div class="panel-heading">
+                    <span class="panel-icon">⚙</span>
+
+                    <div>
+                        <h3>AI Models Used</h3>
+
+                        <p>
+                            Five trained models work together to estimate risk.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="model-list">
+
+                    <div class="model-item">
+                        <span>⌁</span>
+                        <b>Logistic<br>Regression</b>
+                    </div>
+
+                    <div class="model-item">
+                        <span>╱</span>
+                        <b>SVM</b>
+                    </div>
+
+                    <div class="model-item">
+                        <span>♧</span>
+                        <b>KNN</b>
+                    </div>
+
+                    <div class="model-item">
+                        <span>✣</span>
+                        <b>Random<br>Forest</b>
+                    </div>
+
+                    <div class="model-item">
+                        <span>𝕏</span>
+                        <b>XGBoost</b>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="healthai-panel explain-panel">
+
+                <div class="panel-heading">
+                    <span class="panel-icon purple-bg">◉</span>
+
+                    <div>
+                        <h3>Why Explainability?</h3>
+
+                        <p>
+                            See which inputs influence a prediction.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="explain-content">
+
+                    <div class="explain-copy">
+                        <b>Transparent predictions</b>
+
+                        <span>
+                            Feature importance and SHAP make model behaviour
+                            easier to inspect and explain.
+                        </span>
+                    </div>
+
+
+                    <div class="feature-bars">
+
+                        <div>
+                            <label>Age</label>
+                            <i style="width:88%"></i>
+                        </div>
+
+                        <div>
+                            <label>BMI</label>
+                            <i style="width:70%"></i>
+                        </div>
+
+                        <div>
+                            <label>Glucose</label>
+                            <i style="width:55%"></i>
+                        </div>
+
+                        <div>
+                            <label>Blood Pressure</label>
+                            <i style="width:43%"></i>
+                        </div>
+
+                        <div>
+                            <label>Cholesterol</label>
+                            <i style="width:32%"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="healthai-panel prediction-panel">
+
+                <div class="panel-heading">
+                    <span class="panel-icon teal-bg">◈</span>
+
+                    <div>
+                        <h3>Sample Prediction</h3>
+                        <p>Example risk result.</p>
+                    </div>
+                </div>
+
+
+                <div class="sample-risk">
+
+                    <div class="risk-ring">
+                        <span>12%</span>
+                        <small>risk</small>
+                    </div>
+
+
+                    <div>
+                        <span class="low-pill">✓ Low Risk</span>
+                        <strong>12%</strong>
+                        <small>Risk Probability</small>
+
+                        <div class="risk-line">
+                            <i></i>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <section class="healthai-workflow">
+
+            <div class="workflow-title">
+                <span>⚙</span>
+
+                <div>
+                    <h2>How HealthAI Works</h2>
+
                     <p>
-                        Five trained models work together to estimate risk.
+                        From patient information to an interpretable AI result.
                     </p>
                 </div>
             </div>
 
-            <div class="model-list">
 
-                <div class="model-item">
-                    <span>⌁</span>
-                    <b>Logistic<br>Regression</b>
+            <div class="workflow-steps">
+
+                <div class="workflow-step">
+                    <span>01</span>
+
+                    <div>
+                        <b>Enter Information</b>
+
+                        <p>
+                            Provide health details through the assessment form.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="model-item">
-                    <span>╱</span>
-                    <b>SVM</b>
+
+                <em>→</em>
+
+
+                <div class="workflow-step">
+                    <span>02</span>
+
+                    <div>
+                        <b>AI Models Analyze</b>
+
+                        <p>
+                            Multiple trained models calculate risk probability.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="model-item">
-                    <span>♧</span>
-                    <b>KNN</b>
+
+                <em>→</em>
+
+
+                <div class="workflow-step">
+                    <span>03</span>
+
+                    <div>
+                        <b>Compare Results</b>
+
+                        <p>
+                            Review model predictions and the ensemble result.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="model-item">
-                    <span>✣</span>
-                    <b>Random<br>Forest</b>
-                </div>
 
-                <div class="model-item">
-                    <span>𝕏</span>
-                    <b>XGBoost</b>
+                <em>→</em>
+
+
+                <div class="workflow-step">
+                    <span>04</span>
+
+                    <div>
+                        <b>Understand with XAI</b>
+
+                        <p>
+                            Inspect feature importance and SHAP explanations.
+                        </p>
+                    </div>
                 </div>
 
             </div>
@@ -467,177 +669,14 @@ st.markdown(
         </section>
 
 
-        <section class="healthai-panel explain-panel">
-
-            <div class="panel-heading">
-                <span class="panel-icon purple-bg">◉</span>
-
-                <div>
-                    <h3>Why Explainability?</h3>
-                    <p>
-                        See which inputs influence a prediction.
-                    </p>
-                </div>
-            </div>
-
-            <div class="explain-content">
-
-                <div class="explain-copy">
-                    <b>Transparent predictions</b>
-
-                    <span>
-                        Feature importance and SHAP make model behaviour
-                        easier to inspect and explain.
-                    </span>
-                </div>
-
-                <div class="feature-bars">
-
-                    <div>
-                        <label>Age</label>
-                        <i style="width:88%"></i>
-                    </div>
-
-                    <div>
-                        <label>BMI</label>
-                        <i style="width:70%"></i>
-                    </div>
-
-                    <div>
-                        <label>Glucose</label>
-                        <i style="width:55%"></i>
-                    </div>
-
-                    <div>
-                        <label>Blood Pressure</label>
-                        <i style="width:43%"></i>
-                    </div>
-
-                    <div>
-                        <label>Cholesterol</label>
-                        <i style="width:32%"></i>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <section class="healthai-panel prediction-panel">
-
-            <div class="panel-heading">
-                <span class="panel-icon teal-bg">◈</span>
-
-                <div>
-                    <h3>Sample Prediction</h3>
-                    <p>Example risk result.</p>
-                </div>
-            </div>
-
-            <div class="sample-risk">
-
-                <div class="risk-ring">
-                    <span>12%</span>
-                    <small>risk</small>
-                </div>
-
-                <div>
-                    <span class="low-pill">✓ Low Risk</span>
-                    <strong>12%</strong>
-                    <small>Risk Probability</small>
-
-                    <div class="risk-line">
-                        <i></i>
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-
-    </div>
-
-
-    <section class="healthai-workflow">
-
-        <div class="workflow-title">
-            <span>⚙</span>
-
-            <div>
-                <h2>How HealthAI Works</h2>
-                <p>
-                    From patient information to an interpretable AI result.
-                </p>
-            </div>
+        <div class="healthai-footer-note">
+            <span>♥</span>
+            HealthAI &nbsp;•&nbsp;
+            Research / Academic Prototype &nbsp;•&nbsp;
+            AI Health Risk Assessment
         </div>
-
-
-        <div class="workflow-steps">
-
-            <div class="workflow-step">
-                <span>01</span>
-
-                <div>
-                    <b>Enter Information</b>
-                    <p>
-                        Provide health details through the assessment form.
-                    </p>
-                </div>
-            </div>
-
-            <em>→</em>
-
-            <div class="workflow-step">
-                <span>02</span>
-
-                <div>
-                    <b>AI Models Analyze</b>
-                    <p>
-                        Multiple trained models calculate risk probability.
-                    </p>
-                </div>
-            </div>
-
-            <em>→</em>
-
-            <div class="workflow-step">
-                <span>03</span>
-
-                <div>
-                    <b>Compare Results</b>
-                    <p>
-                        Review model predictions and the ensemble result.
-                    </p>
-                </div>
-            </div>
-
-            <em>→</em>
-
-            <div class="workflow-step">
-                <span>04</span>
-
-                <div>
-                    <b>Understand with XAI</b>
-                    <p>
-                        Inspect feature importance and SHAP explanations.
-                    </p>
-                </div>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <div class="healthai-footer-note">
-        <span>♥</span>
-        HealthAI &nbsp;•&nbsp;
-        Research / Academic Prototype &nbsp;•&nbsp;
-        AI Health Risk Assessment
-    </div>
-    """,
+        """
+    ),
     unsafe_allow_html=True,
 )
 
@@ -651,6 +690,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
 st.markdown(
     dedent(
         """
@@ -660,6 +700,7 @@ st.markdown(
 
             <div>
                 <h2>Choose your assessment</h2>
+
                 <p>
                     Select a health condition to begin the AI-based
                     risk assessment.
@@ -667,6 +708,7 @@ st.markdown(
             </div>
 
         </div>
+
 
         <p class="assessment-intro">
             Choose one of the available assessments to continue.
@@ -686,22 +728,24 @@ card1, card2, card3 = st.columns(3)
 
 with card1:
     st.markdown(
-        """
-        <div class="disease-card">
+        dedent(
+            """
+            <div class="disease-card">
 
-            <div class="disease-icon">🩸</div>
+                <div class="disease-icon">🩸</div>
 
-            <div class="disease-card-title">
-                Diabetes
+                <div class="disease-card-title">
+                    Diabetes
+                </div>
+
+                <div class="disease-card-text">
+                    Assess diabetes-related risk using patient symptoms
+                    and health information.
+                </div>
+
             </div>
-
-            <div class="disease-card-text">
-                Assess diabetes-related risk using patient symptoms
-                and health information.
-            </div>
-
-        </div>
-        """,
+            """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -719,22 +763,24 @@ with card1:
 
 with card2:
     st.markdown(
-        """
-        <div class="disease-card">
+        dedent(
+            """
+            <div class="disease-card">
 
-            <div class="disease-icon">❤️</div>
+                <div class="disease-icon">❤️</div>
 
-            <div class="disease-card-title">
-                Heart Disease
+                <div class="disease-card-title">
+                    Heart Disease
+                </div>
+
+                <div class="disease-card-text">
+                    Assess cardiovascular risk from clinical measurements
+                    and symptoms.
+                </div>
+
             </div>
-
-            <div class="disease-card-text">
-                Assess cardiovascular risk from clinical measurements
-                and symptoms.
-            </div>
-
-        </div>
-        """,
+            """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -752,22 +798,24 @@ with card2:
 
 with card3:
     st.markdown(
-        """
-        <div class="disease-card">
+        dedent(
+            """
+            <div class="disease-card">
 
-            <div class="disease-icon">🎗️</div>
+                <div class="disease-icon">🎗️</div>
 
-            <div class="disease-card-title">
-                Breast Cancer
+                <div class="disease-card-title">
+                    Breast Cancer
+                </div>
+
+                <div class="disease-card-text">
+                    Assess risk from diagnostic tumor measurement features
+                    and predict risks.
+                </div>
+
             </div>
-
-            <div class="disease-card-text">
-                Assess risk from diagnostic tumor measurement features
-                and predict risks.
-            </div>
-
-        </div>
-        """,
+            """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -784,11 +832,13 @@ with card3:
 # ============================================================
 
 st.markdown(
-    """
-    <div class="healthai-bottom-note">
-        HealthAI • EXHRA • Research / Academic Prototype •
-        Not a medical diagnosis
-    </div>
-    """,
+    dedent(
+        """
+        <div class="healthai-bottom-note">
+            HealthAI • EXHRA • Research / Academic Prototype •
+            Not a medical diagnosis
+        </div>
+        """
+    ),
     unsafe_allow_html=True,
 )
